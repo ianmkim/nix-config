@@ -69,6 +69,7 @@ in {
     python312Packages.pip
     rustup
     gcc
+    btop
   ];
 
   home.sessionVariables = {
