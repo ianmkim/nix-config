@@ -7,11 +7,16 @@
   config,
   pkgs,
   ...
-}: let 
+}: let
   vimrcRepo = builtins.fetchGit {
       url = "https://github.com/ianmkim/vimrc";
-      rev = "55370c21bd2b2d304d0665df3e06c5c5e210cf25"; 
+      rev = "55370c21bd2b2d304d0665df3e06c5c5e210cf25";
       submodules = true;
+    };
+    nvimrcRepo = builtins.fetchGit {
+        url = "https://github.com/ianmkim/nvim-config.git";
+        rev = "867fde7e34397037d3e6c37910364e2d56c49de8";
+        submodules = true;
     };
 in {
   # You can import other home-manager modules here
@@ -59,8 +64,9 @@ in {
 
   # Add stuff for your user as you see fit:
   # programs.neovim.enable = true;
-  home.packages = with pkgs; [ 
-    steam 
+  home.packages = with pkgs; [
+    neovim
+    steam
     ibm-plex
     tmux
     ack
@@ -75,7 +81,7 @@ in {
   home.sessionVariables = {
       TERMINFO_DIRS = "${pkgs.kitty.terminfo.outPath}/share/terminfo";
   };
-  
+
   # Add Vim and amix/vimrc configuration
   programs.vim.packageConfigurable = {
     enable = true;
@@ -88,6 +94,8 @@ in {
   # Fetch amix/vimrc repository
   # Clone amix/vimrc repository into ~/.vim_runtime
   home.file.".vim_runtime".source = vimrcRepo;
+
+  home.file.".config/nvim".source = nvimrcRepo;
 
   # Set up .vimrc to source amix/vimrc
   home.file.".vimrc".text = ''
@@ -188,7 +196,7 @@ in {
       set -g status-bg colour16
       set -g status-fg colour16
       set -g status-interval 2
-      
+
       # messaging
       set -g automatic-rename on
 
